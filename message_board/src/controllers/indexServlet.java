@@ -17,24 +17,31 @@ import models.Message;
 
 @WebServlet("/index")
 public class indexServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
+
     public indexServlet() {
         super();
     }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-	        throws ServletException, IOException {
-	    EntityManager em  = DButil.createEntityManager();
-	    
-	    List<Message> messages = em.createNamedQuery("getAllMessages", Message.class).getResultList();
-	    
-	    em.close();
-	    
-	    request.setAttribute("messages", messages);
-	    
-	    var rd = request.getRequestDispatcher("/WEB-INF/views/messages/index.jsp");
-	    rd.forward(request, response);
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        EntityManager em = DButil.createEntityManager();
+
+        List<Message> messages = em.createNamedQuery("getAllMessages", Message.class).getResultList();
+
+        em.close();
+
+        request.setAttribute("messages", messages);
+
+        // フラッシュメッセージがセッションスコープにセットされていたら
+        // リクエストスコープに保存する（セッションスコープからは削除）
+        if (request.getSession().getAttribute("flush") != null) {
+            request.setAttribute("flush", request.getSession().getAttribute("flush"));
+            request.getSession().removeAttribute("flush");
+        }
+
+        var rd = request.getRequestDispatcher("/WEB-INF/views/messages/index.jsp");
+        rd.forward(request, response);
+    }
 
 }
