@@ -15,23 +15,14 @@ import utils.DButil;
 
 import models.Message;
 
-/**
- * Servlet implementation class indexServlet
- */
 @WebServlet("/index")
 public class indexServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public indexServlet() {
         super();
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 	        throws ServletException, IOException {
 	    EntityManager em  = DButil.createEntityManager();
